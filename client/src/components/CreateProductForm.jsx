@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 
-const CreateProductForm = () =>{
+const CreateProductForm = ({allProducts,setAllProducts }) =>{
     const [title, setTitle] = useState("");
-    const [price, setPrice] = useState()
+    const [price, setPrice] = useState(0)
     const [description, setdescription] = useState("")
     const onsubmittHandler = (e) =>{
         e.preventDefault()
+        // why do we not use useEffect
         axios.post('http://localhost:8000/api/products',{
             title,
             price,
@@ -15,6 +16,7 @@ const CreateProductForm = () =>{
         .then(res=>{
             console.log(res); // always console log to get used to tracking your data!
             console.log(res.data);
+            setAllProducts([...allProducts,res.data])
         })
         .catch(err=>console.log(err))
     }
@@ -28,7 +30,7 @@ const CreateProductForm = () =>{
                 <input type="number" onChange={(e)=> setPrice(e.target.value)}/><br/>
                 <label htmlFor="description">Description</label>
                 <input type="text" onChange={(e)=>setdescription(e.target.value)}/><br/>
-                <button>Submit</button>
+                <button>Create</button>
             </form>
         </div>
     )
