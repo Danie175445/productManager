@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import {useNavigate } from "react-router-dom"
 
 const CreateProductForm = ({allProducts,setAllProducts }) =>{
     const [title, setTitle] = useState("");
     const [price, setPrice] = useState(0)
     const [description, setdescription] = useState("")
+    const navigate = useNavigate()
     const onsubmittHandler = (e) =>{
         e.preventDefault()
-        // why do we not use useEffect
         axios.post('http://localhost:8000/api/products',{
             title,
             price,
@@ -16,9 +17,11 @@ const CreateProductForm = ({allProducts,setAllProducts }) =>{
         .then(res=>{
             console.log(res); // always console log to get used to tracking your data!
             console.log(res.data);
-            setAllProducts([...allProducts,res.data])
+            console.log(res.data.product)
+            setAllProducts([...allProducts,res.data.product])
+            // navigate("/")
         })
-        .catch(err=>console.log(err))
+        .catch(err=>console.log(err));
     }
     return (
         <div>
@@ -30,7 +33,7 @@ const CreateProductForm = ({allProducts,setAllProducts }) =>{
                 <input type="number" onChange={(e)=> setPrice(e.target.value)}/><br/>
                 <label htmlFor="description">Description</label>
                 <input type="text" onChange={(e)=>setdescription(e.target.value)}/><br/>
-                <button>Create</button>
+                <input type="submit" value="create" />
             </form>
         </div>
     )

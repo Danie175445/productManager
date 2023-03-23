@@ -12,7 +12,21 @@ module.exports.findAllProducts = (req,res) => {
     .catch((err)=> res.json({message:'something went wrong', error:err}));
 }
 module.exports.findOneProduct = (req,res) =>{
-    product.find({_id:req.params.id})
+    product.findOne({_id:req.params.id})
         .then((singleProduct)=> res.json(singleProduct))
         .catch((err)=> console.log('something went wrong',err))
+}
+module.exports.editProduct= (req,res)=>{
+    product.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {new:true,runValidator:true}
+    )
+        .then((updateProduct)=> res.json(updateProduct))
+        .catch((err)=> console.log('something went wrong',err))
+}
+module.exports.deleteProduct = (req,res) =>{
+    product.deleteOne({_id:req.params.id})
+        .then(results =>res.json(results))
+        .catch((err)=>console.log('something went wrong'))
 }
